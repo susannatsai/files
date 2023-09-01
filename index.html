@@ -1,0 +1,32 @@
+<!doctype html>
+<style>
+  * { margin:0; padding:0; }
+  body { font-family:sans-serif; color:#4a4b4c; }
+  body >* { margin:.25rem 2rem 0; }
+  h1 { font-weight:normal; font-size:2rem; margin-bottom:1.5rem;
+    background:#7a7a7b; color:#fafafa; padding:1rem 2rem; margin:0 0 2rem;
+  }
+  a { display:block; color:inherit;  text-decoration:none; }
+  a:hover { color:red; }
+</style>
+<h1>Files</h1>
+
+<script>
+// curl https://api.github.com/repos/susannatsai-com/files/contents/
+async function listFiles(owner, dir, ext) {
+  try {
+    const data = await fetch(
+      'https://api.github.com/repos/' + owner + '/' + dir + '/contents/')
+    document.body.insertAdjacentHTML('beforeend', (await data.json())
+      .map(spec => spec.name)
+      .filter(fn => !ext || fn.endsWith(ext))
+      .map(fn => '<a href="'+fn+'">' + fn + '</a>')
+      .join('') || '<div>No files.</div>')
+  } catch (e) {
+     document.body.insertAdjacentHTML('beforeend',
+       'Failed to retrieve file list: ' + e.message)
+  }
+}
+listFiles('susannatsai-com', 'files', '.pdf')
+
+</script>
