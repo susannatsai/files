@@ -13,13 +13,13 @@
 
 <script>
 // curl https://api.github.com/repos/susannatsai-com/files/contents/
-async function listFiles(owner, dir, ext) {
+async function listFiles(owner, dir) {
   try {
     const data = await fetch(
       'https://api.github.com/repos/' + owner + '/' + dir + '/contents/')
     document.body.insertAdjacentHTML('beforeend', (await data.json())
       .map(spec => spec.name)
-      .filter(fn => !ext || fn.endsWith(ext))
+      .filter(fn => ! ['CNAME', '404.html', 'index.html'].includes(fn))
       .map(fn => '<a href="'+fn+'">' + fn + '</a>')
       .join('') || '<div>No files.</div>')
   } catch (e) {
@@ -27,6 +27,6 @@ async function listFiles(owner, dir, ext) {
        'Failed to retrieve file list: ' + e.message)
   }
 }
-listFiles('susannatsai-com', 'files', '.pdf')
+listFiles('susannatsai-com', 'files')
 
 </script>
